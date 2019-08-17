@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: authentication-app
+  labels:
+    run: authentication-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: authentication-app
+  template:
+    metadata:
+      labels:
+        run: authentication-app
+    spec:
+      containers:
+        - image: jclaudiocf/authentication
+          name: authentication-app
+          ports:
+            - containerPort: 8090
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: authentication-app
+  name: authentication-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - nodePort: 32752
+      port: 8090
+      protocol: TCP
+      targetPort: 8090
+  selector:
+    run: authentication-app
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - ip: None
