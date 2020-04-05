@@ -1,2 +1,2 @@
-# java-study
-Study technologies Java
+# Project
+> Repository to Java study
